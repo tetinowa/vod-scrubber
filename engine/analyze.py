@@ -10,15 +10,31 @@ from collections import namedtuple
 
 import numpy as np
 
+sys.stdout.reconfigure(encoding="utf-8")
+sys.stderr.reconfigure(encoding="utf-8")
+
 WINDOW_SEC = 5.0
 HOP_SEC = 2.0
 
 WEIGHT_AUDIO_ENERGY = 0.15
+WEIGHT_SCREAM_PITCH = 0.15
 WEIGHT_PROFANITY = 0.05
 WEIGHT_SPEAKING_RATE = 0.10
 WEIGHT_REPETITION = 0.15
 WEIGHT_PAYOFF = 0.10
 WEIGHT_CHAT = 0.00
+
+PITCH_FMIN_HZ = 80.0
+PITCH_FMAX_HZ = 2000.0
+PITCH_SAMPLE_RATE = 8000
+PITCH_HOP_LENGTH = 1024
+
+COMPILATION_TAGS = {
+    "is_nonono_or_death_beat": "nonono_death_compilation",
+    "is_zweihander_beat": "zweihander_compilation",
+    "is_boss_rage_cussing_beat": "boss_rage_compilation",
+    "is_boss_victory_beat": "boss_victory_compilation",
+}
 
 LLM_MERGE_GAP_SEC = 30.0
 
@@ -61,6 +77,7 @@ PROFANITY_WORDS = ["fuck", "fucking", "shit", "damn", "hell"]
 
 SIGNAL_LABELS = {
     "audio_energy": "loud",
+    "scream_pitch": "high-pitched scream",
     "profanity": "raging/cursing",
     "speaking_rate": "rapid speech",
     "repetition": "repeated exclamation",
@@ -93,10 +110,14 @@ def normalize(a):
     return np.zeros_like(a)
 
 
-def audio_energy_scores(wav_path, window_sec, hop_sec):
+def load_audio(wav_path):
     import librosa
+    print("Loading audio...", flush=True)
+    return librosa.load(wav_path, sr=None)
+
+
+def audio_energy_scores(y, sr, window_sec, hop_sec):
     print("Scoring audio energy...", flush=True)
-    y, sr = librosa.load(wav_path, sr=None)
     win = int(window_sec * sr)
     hop = int(hop_sec * sr)
     times, energies = [], []
@@ -105,6 +126,23 @@ def audio_energy_scores(wav_path, window_sec, hop_sec):
         energies.append(float(np.sqrt(np.mean(chunk ** 2))))
         times.append(start / sr)
     return np.array(times), normalize(energies)
+
+
+def pitch_scream_scores(y, sr, times, window_sec):
+    import librosa
+    print("Scoring pitch/scream signal...", flush=True)
+    if sr != PITCH_SAMPLE_RATE:
+        y = librosa.resample(y, orig_sr=sr, target_sr=PITCH_SAMPLE_RATE)
+        sr = PITCH_SAMPLE_RATE
+    f0 = librosa.yin(y, fmin=PITCH_FMIN_HZ, fmax=PITCH_FMAX_HZ, sr=sr, hop_length=PITCH_HOP_LENGTH)
+    frame_times = librosa.times_like(f0, sr=sr, hop_length=PITCH_HOP_LENGTH)
+    peaks = np.zeros(len(times))
+    for i, t in enumerate(times):
+        mask = (frame_times >= t) & (frame_times < t + window_sec)
+        voiced = f0[mask]
+        voiced = voiced[np.isfinite(voiced)]
+        peaks[i] = float(np.max(voiced)) if len(voiced) else 0.0
+    return normalize(peaks)
 
 
 def format_hms(seconds):
@@ -145,11 +183,11 @@ def cache_covers_duration(cached_duration_sec, requested_duration_sec):
     return cached_duration_sec >= requested_duration_sec
 
 
-def trim_to_duration(times, audio_e, words, duration_sec):
+def trim_to_duration(times, audio_e, pitch_e, words, duration_sec):
     if duration_sec is None:
-        return times, audio_e, words
+        return times, audio_e, pitch_e, words
     mask = times < duration_sec
-    return times[mask], audio_e[mask], [w for w in words if w.start < duration_sec]
+    return times[mask], audio_e[mask], pitch_e[mask], [w for w in words if w.start < duration_sec]
 
 
 def load_raw_cache(cache_path):
@@ -157,21 +195,24 @@ def load_raw_cache(cache_path):
         return None
     with open(cache_path) as f:
         data = json.load(f)
+    pitch_e = np.array(data["pitch_e"]) if "pitch_e" in data else None
     return {
         "duration_sec": data["duration_sec"],
         "times": np.array(data["times"]),
         "audio_e": np.array(data["audio_e"]),
+        "pitch_e": pitch_e,
         "words": [Word(*w) for w in data["words"]],
     }
 
 
-def save_raw_cache(cache_path, duration_sec, times, audio_e, words):
+def save_raw_cache(cache_path, duration_sec, times, audio_e, pitch_e, words):
     os.makedirs(CACHE_DIR, exist_ok=True)
     with open(cache_path, "w") as f:
         json.dump({
             "duration_sec": duration_sec,
             "times": times.tolist(),
             "audio_e": audio_e.tolist(),
+            "pitch_e": pitch_e.tolist(),
             "words": words,
         }, f)
 
@@ -182,10 +223,25 @@ def compute_raw_signals(video_path, duration_sec, start_sec=0.0):
     clip_duration_sec = (duration_sec - start_sec) if duration_sec is not None else None
     try:
         extract_audio(video_path, wav_path, clip_duration_sec, start_sec)
-        times, audio_e = audio_energy_scores(wav_path, WINDOW_SEC, HOP_SEC)
+        y, sr = load_audio(wav_path)
+        times, audio_e = audio_energy_scores(y, sr, WINDOW_SEC, HOP_SEC)
+        pitch_e = pitch_scream_scores(y, sr, times, WINDOW_SEC)
         words = transcribe_words(wav_path, start_sec)
         times = times + start_sec
-        return times, audio_e, words
+        return times, audio_e, pitch_e, words
+    finally:
+        if os.path.exists(wav_path):
+            os.remove(wav_path)
+
+
+def backfill_pitch(video_path, times):
+    require_ffmpeg()
+    print("Cached data has no pitch signal yet, backfilling (audio-only, no re-transcription)...", flush=True)
+    wav_path = os.path.join(os.path.dirname(os.path.abspath(video_path)) or ".", "_analyze_audio.wav")
+    try:
+        extract_audio(video_path, wav_path)
+        y, sr = load_audio(wav_path)
+        return pitch_scream_scores(y, sr, times, WINDOW_SEC)
     finally:
         if os.path.exists(wav_path):
             os.remove(wav_path)
@@ -196,20 +252,25 @@ def get_raw_signals(video_path, duration_sec, use_cache):
     cached = load_raw_cache(cache_path) if use_cache else None
 
     if cached is not None and cache_covers_duration(cached["duration_sec"], duration_sec):
+        if cached["pitch_e"] is None:
+            cached["pitch_e"] = backfill_pitch(video_path, cached["times"])
+            save_raw_cache(cache_path, cached["duration_sec"], cached["times"], cached["audio_e"], cached["pitch_e"], cached["words"])
         print(f"Using cached audio+transcription: {cache_path}", flush=True)
-        return trim_to_duration(cached["times"], cached["audio_e"], cached["words"], duration_sec)
+        return trim_to_duration(cached["times"], cached["audio_e"], cached["pitch_e"], cached["words"], duration_sec)
 
     if cached is not None and cached["duration_sec"] is not None:
         print(f"Extending cached transcription from {format_hms(cached['duration_sec'])} onward...", flush=True)
-        new_times, new_audio_e, new_words = compute_raw_signals(video_path, duration_sec, start_sec=cached["duration_sec"])
+        new_times, new_audio_e, new_pitch_e, new_words = compute_raw_signals(video_path, duration_sec, start_sec=cached["duration_sec"])
         times = np.concatenate([cached["times"], new_times])
         audio_e = np.concatenate([cached["audio_e"], new_audio_e])
+        old_pitch_e = cached["pitch_e"] if cached["pitch_e"] is not None else backfill_pitch(video_path, cached["times"])
+        pitch_e = np.concatenate([old_pitch_e, new_pitch_e])
         words = cached["words"] + new_words
     else:
-        times, audio_e, words = compute_raw_signals(video_path, duration_sec)
+        times, audio_e, pitch_e, words = compute_raw_signals(video_path, duration_sec)
 
-    save_raw_cache(cache_path, duration_sec, times, audio_e, words)
-    return trim_to_duration(times, audio_e, words, duration_sec)
+    save_raw_cache(cache_path, duration_sec, times, audio_e, pitch_e, words)
+    return trim_to_duration(times, audio_e, pitch_e, words, duration_sec)
 
 
 def confident_words(words):
@@ -244,9 +305,9 @@ def speech_presence_scores(words, times, window_sec):
     return np.array([1.0 if words_in_window(words, t, window_sec) else 0.0 for t in times])
 
 
-def gate_audio_energy(audio_e, speech_presence):
+def gate_by_speech_presence(signal, speech_presence):
     gate = AUDIO_ENERGY_SPEECH_GATE_FLOOR + (1 - AUDIO_ENERGY_SPEECH_GATE_FLOOR) * speech_presence
-    return audio_e * gate
+    return signal * gate
 
 
 def profanity_density_scores(words, times, window_sec):
@@ -313,6 +374,7 @@ def fuse_scores(times, signals):
     for i in range(len(times)):
         contributions = {
             "audio_energy": WEIGHT_AUDIO_ENERGY * signals["audio_energy"][i],
+            "scream_pitch": WEIGHT_SCREAM_PITCH * signals["scream_pitch"][i],
             "profanity": WEIGHT_PROFANITY * signals["profanity"][i],
             "speaking_rate": WEIGHT_SPEAKING_RATE * signals["speaking_rate"][i],
             "repetition": WEIGHT_REPETITION * signals["repetition"][i],
@@ -352,24 +414,25 @@ def to_candidates(chosen, pad_before, pad_after):
     ]
 
 
-def merge_candidates(heuristic_candidates, llm_candidates, min_gap_sec):
-    merged = list(llm_candidates)
-    for c in heuristic_candidates:
-        if any(abs(c["time"] - m["time"]) < min_gap_sec for m in llm_candidates):
+def merge_candidates(base_candidates, priority_candidates, min_gap_sec):
+    merged = list(priority_candidates)
+    for c in base_candidates:
+        if any(abs(c["time"] - m["time"]) < min_gap_sec for m in priority_candidates):
             continue
         merged.append(c)
     merged.sort(key=lambda c: c["time"])
     return merged
 
 
-def analyze(video_path, min_score, min_gap_sec, pad_before, pad_after, duration_sec=None, use_cache=True, max_candidates=None, use_llm=True):
-    times, audio_e, words = get_raw_signals(video_path, duration_sec, use_cache)
+def analyze(video_path, min_score, min_gap_sec, pad_before, pad_after, duration_sec=None, use_cache=True, max_candidates=None, use_llm=True, use_ocr=True):
+    times, audio_e, pitch_e, words = get_raw_signals(video_path, duration_sec, use_cache)
     clean_words = drop_hallucination_loops(confident_words(words))
 
     print("Scoring audio and speech signals...", flush=True)
     speech_presence = speech_presence_scores(words, times, WINDOW_SEC)
     signals = {
-        "audio_energy": gate_audio_energy(audio_e, speech_presence),
+        "audio_energy": gate_by_speech_presence(audio_e, speech_presence),
+        "scream_pitch": gate_by_speech_presence(pitch_e, speech_presence),
         "profanity": profanity_density_scores(clean_words, times, WINDOW_SEC),
         "speaking_rate": speaking_rate_spike_scores(words, times, WINDOW_SEC),
         "repetition": repetition_scores(clean_words, times, WINDOW_SEC),
@@ -386,7 +449,15 @@ def analyze(video_path, min_score, min_gap_sec, pad_before, pad_after, duration_
 
     import llm_review
     llm_candidates = llm_review.get_llm_candidates(video_path, words, duration_sec, use_cache)
-    return merge_candidates(heuristic_candidates, llm_candidates, LLM_MERGE_GAP_SEC)
+    merged = merge_candidates(heuristic_candidates, llm_candidates, LLM_MERGE_GAP_SEC)
+
+    if not use_ocr:
+        return merged
+
+    import victory_ocr
+    victory_times = victory_ocr.scan_for_boss_victories(video_path, merged)
+    ocr_candidates = victory_ocr.victories_to_candidates(victory_times)
+    return merge_candidates(merged, ocr_candidates, LLM_MERGE_GAP_SEC)
 
 
 def main():
@@ -401,18 +472,26 @@ def main():
     parser.add_argument("--duration-min", type=float, default=None, help="Only process the first N minutes of the VOD")
     parser.add_argument("--no-cache", action="store_true", help="Force re-transcription even if a cached run exists")
     parser.add_argument("--no-llm", action="store_true", help="Skip the Claude semantic review pass, heuristics only")
+    parser.add_argument("--no-ocr", action="store_true", help="Skip the VICTORY ACHIEVED banner scan")
     args = parser.parse_args()
 
     duration_sec = args.duration_min * 60 if args.duration_min else None
     candidates = analyze(
         args.video, args.min_score, args.min_gap, args.pad_before, args.pad_after,
         duration_sec=duration_sec, use_cache=not args.no_cache, max_candidates=args.top, use_llm=not args.no_llm,
+        use_ocr=not args.no_ocr,
     )
 
     with open(args.out, "w") as f:
         json.dump(candidates, f, indent=2)
-
     print(f"\nDone. {len(candidates)} candidates written to {args.out}", flush=True)
+
+    for tag, suffix in COMPILATION_TAGS.items():
+        compilation = sorted((c for c in candidates if c.get(tag)), key=lambda c: c["time"])
+        compilation_out = os.path.splitext(args.out)[0] + f"_{suffix}.json"
+        with open(compilation_out, "w") as f:
+            json.dump(compilation, f, indent=2)
+        print(f"{len(compilation)} {suffix.replace('_', ' ')} moments written to {compilation_out}", flush=True)
 
 
 if __name__ == "__main__":

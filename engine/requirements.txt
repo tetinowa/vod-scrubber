@@ -5,3 +5,5 @@ nvidia-cublas-cu12
 nvidia-cudnn-cu12
 anthropic
 python-dotenv
+pytesseract
+Pillow

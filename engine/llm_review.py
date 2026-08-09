@@ -11,7 +11,7 @@ PIPELINE_VERSION = "v2-two-tier"
 
 SWEEP_MODEL = "claude-haiku-4-5-20251001"
 SWEEP_MAX_TOKENS = 16384
-SWEEP_MERGE_GAP_SEC = 30.0
+SWEEP_MERGE_GAP_SEC = 60.0
 
 CLASSIFY_MODEL = "claude-sonnet-5"
 CLASSIFY_MAX_TOKENS = 4096
@@ -21,7 +21,7 @@ CONTEXT_AFTER_SEC = 20.0
 
 CATEGORIES = [
     "skill_highlight", "death_comedy", "banter_wit",
-    "innuendo_character_bit", "wholesome_genuine", "chaos_unscripted",
+    "innuendo_character_bit", "wholesome_genuine", "chaos_unscripted", "cute_charming",
 ]
 CONTROVERSY_LEVELS = ["none", "mild", "edgy", "high"]
 MODERATION_RISKS = ["none", "slur_or_flaggable_language", "sexual_content", "other"]
@@ -39,10 +39,26 @@ trash talk at the boss/game instead of helplessness.
 recognizable callback bit for regulars, not just generic panic. Worth tagging when it's clearly the \
 falling-specific version.
 
-Known transcription noise: faster-whisper occasionally hallucinates repeated-word loops (the same single \
-word repeated 6+ times with no variation) on ambiguous or quiet audio. That is garbage, not a real bit — \
-don't classify it. A genuine repeated-phrase callback (words vary slightly, phrase carries meaning each \
-repetition) is not this — treat that as real."""
+Also actively look for cute_charming moments — small, low-key, endearing shenanigans that make her come \
+across as cute/likeable, not just funny or hype. These can be quiet: a silly voice, a little quirk, a soft \
+aside, small dorky enthusiasm. Don't skip these just because they're not loud or don't have a punchline — \
+this category isn't about being impressive, it's about being charming in a small way.
+
+Stick close to what's literally in the transcript for your reasoning — don't invent surrounding narrative \
+or causality you can't actually verify from the text and context given. If you're inferring what triggered \
+something rather than reading it directly, that's a sign confidence should be low, not a place to guess \
+confidently.
+
+Known transcription noise, two distinct patterns — both garbage, don't classify either:
+- Tight loops: the same single word repeated 6+ times back-to-back with no variation (e.g. "no no no no \
+no no no no"). A genuine repeated-phrase callback (words vary slightly, phrase carries meaning each \
+repetition) is NOT this — treat that as real.
+- Sparse dead-air noise: isolated single words (often "you") scattered ~20-30+ seconds apart over what is \
+actually silence or near-silence — e.g. pre-stream waiting room, AFK/bathroom breaks, quiet exploration. \
+Individually each word looks like normal transcription, but across a stretch of several minutes it's \
+periodic noise, not speech. If a segment is mostly gaps with a lone word every 20-30s and no real sentence \
+forms, do not invent a narrative around it (this has previously caused false positives like reading \
+"self-censoring" into what was actually just hallucinated noise before the stream had even started)."""
 
 FEW_SHOT_EXAMPLES = [
     {
@@ -69,6 +85,10 @@ FEW_SHOT_EXAMPLES = [
             "clip_end_offset_sec": 8.0,
             "reason": "Genuine unscripted panic-spiral, helpless direction — real escalating dread, not a bit but authentic chaos.",
             "sub_beats": [],
+            "is_nonono_or_death_beat": True,
+            "is_zweihander_beat": False,
+            "is_boss_rage_cussing_beat": False,
+            "is_boss_victory_beat": False,
         },
     },
     {
@@ -95,6 +115,10 @@ FEW_SHOT_EXAMPLES = [
             "clip_end_offset_sec": 5.0,
             "reason": "Same panic trigger as the helpless pattern, but flips feral — mock-aggressive trash talk at the boss instead of helplessness, funny escalation ending on a stammered insult.",
             "sub_beats": [],
+            "is_nonono_or_death_beat": False,
+            "is_zweihander_beat": False,
+            "is_boss_rage_cussing_beat": True,
+            "is_boss_victory_beat": False,
         },
     },
     {
@@ -120,6 +144,10 @@ FEW_SHOT_EXAMPLES = [
             "clip_end_offset_sec": 25.0,
             "reason": "Realizes a song is literally titled \"Sex,\" turns it into a repeated bit riding the double meaning — the repetition here is a deliberate callback, not transcription noise, because the phrase stays coherent and meaningful each time.",
             "sub_beats": [],
+            "is_nonono_or_death_beat": False,
+            "is_zweihander_beat": False,
+            "is_boss_rage_cussing_beat": False,
+            "is_boss_victory_beat": False,
         },
     },
     {
@@ -132,6 +160,22 @@ FEW_SHOT_EXAMPLES = [
         ),
         "classification": None,
         "classification_note": "Not clip-worthy. This exact phrasing (\"let's go, my zwei\") is a habitual pre-attempt ritual said the same way most attempts — despite matching hype phrasing, there's no genuine excitement here. Do not flag routine tics like this just because they use hype-coded words. (This is a confident NO, not a low-confidence case — she says this the same way nearly every attempt, there's nothing ambiguous about it.)",
+    },
+    {
+        "label": "sparse dead-air hallucination noise (negative)",
+        "transcript": (
+            "[00:00:00] you\n"
+            "[00:00:30] you\n"
+            "[00:01:00] you\n"
+            "[00:01:30] you\n"
+            "[00:02:00] you\n"
+            "[00:02:30] you\n"
+            "[00:03:00] you\n"
+            "[00:03:30] you\n"
+            "[00:04:21] oh oh shit wait um i fucked something up"
+        ),
+        "classification": None,
+        "classification_note": "Not clip-worthy, and not real speech. This is pre-stream dead air — a single hallucinated word (\"you\") every ~30 seconds is faster-whisper noise, not someone actually talking. Don't invent a narrative (e.g. \"self-censoring,\" \"trailing off\") to explain sparse isolated words like this. The real content only starts at 00:04:21 once actual sentences appear.",
     },
     {
         "label": "genuinely ambiguous — low confidence example",
@@ -158,6 +202,10 @@ FEW_SHOT_EXAMPLES = [
             "clip_end_offset_sec": 25.0,
             "reason": "Absurd dark-humor tangent with a self-aware \"that got dark\" beat and an escalating self-own ending (\"shut the fuck up, laura\") — has real comedic shape, but the setup is heavy enough that confidence is low rather than a clean flag.",
             "sub_beats": [],
+            "is_nonono_or_death_beat": False,
+            "is_zweihander_beat": False,
+            "is_boss_rage_cussing_beat": False,
+            "is_boss_victory_beat": False,
         },
     },
 ]
@@ -202,6 +250,10 @@ Find zero or more genuinely independently-clippable moments in the FLAGGED SEGME
 understanding only, don't report moments that are only in the context). Do not force a quota — if nothing \
 here is actually clip-worthy despite the sweep flag, return an empty array.
 
+She edits clips herself and would rather trim excess than have something feel cut off, so err toward more \
+generous clip_start_offset_sec/clip_end_offset_sec rather than cutting tight — better to include a few \
+extra seconds of setup or a follow-up reaction than to clip it right at the punchline.
+
 For each moment, respond with an object in this exact shape:
 {{
   "categories": [...],  // subset of {categories}
@@ -212,12 +264,43 @@ For each moment, respond with an object in this exact shape:
   "has_setup_punchline_shape": true | false,
   "confidence": "high" | "low",
   "uncertainty_reason": "why this is a hard call, or empty string if confidence is high",
-  "anchor_sec": <absolute video-time float of the actual moment>,
+  "anchor_sec": <absolute video-time float of the SPECIFIC line that makes this clip-worthy — copy the exact \
+timestamp of that line from the transcript, don't estimate a rough midpoint of the broader moment. If a \
+setup and its punchline are both essential, anchor on the punchline and let clip_start_offset_sec reach \
+back to cover the setup>,
   "clip_start_offset_sec": <float, negative, seconds before anchor_sec the clip should start>,
   "clip_end_offset_sec": <float, positive, seconds after anchor_sec the clip should end>,
   "reason": "one line why this is clip-worthy",
-  "sub_beats": [{{"offset_sec": <absolute video-time float>, "note": "why this sub-moment is independently clippable"}}]
+  "sub_beats": [{{"offset_sec": <absolute video-time float>, "note": "why this sub-moment is independently clippable"}}],
+  "is_nonono_or_death_beat": true | false,
+  "is_zweihander_beat": true | false,
+  "is_boss_rage_cussing_beat": true | false,
+  "is_boss_victory_beat": true | false
 }}
+
+is_nonono_or_death_beat feeds a separate montage of just her panic-scream/death moments strung together — set \
+true if this moment IS (or centers on) a "nononono" panic-spiral scream (either direction, including the \
+falling-specific callback) or an actual in-game death/character death reaction. false for everything else, \
+even other panic-spiral variants that aren't the classic nononono scream (e.g. rapid-fire cursing without \
+"no" isn't this).
+
+is_boss_rage_cussing_beat feeds a separate montage of her cussing/raging directly at a boss or enemy — this \
+is the feral-direction panic-spiral specifically (mock-aggressive trash talk, swearing AT the boss/enemy), \
+not cussing at herself, at game mechanics in general, or in unrelated bits. If it's the helpless-direction \
+panic-spiral (dread, not aggression) this is false even if there's swearing in it.
+
+is_boss_victory_beat feeds a separate montage of the moments she actually beats a boss — set true for the \
+genuine victory reaction (relief, triumph, disbelief that it's finally over) right after a boss kill, not \
+mid-fight optimism or a false alarm where the boss wasn't actually dead. This is usually a real payoff — \
+if you can tell from context (before/after) that a prolonged struggle with a specific boss just ended, \
+anchor on the reaction line itself.
+
+is_zweihander_beat feeds a separate montage of moments about her sword (called Zwei/Zweihander) specifically \
+— set true if the moment is genuinely ABOUT the sword itself: affection/mock-romance toward it, worship-style \
+bits, jokes or wordplay tied to its name, treating it as a character. false for just casually mentioning it \
+in passing, and false for the routine pre-attempt "let's go, my zwei" ritual on its own (that's a habitual \
+tic, not appreciation content) — unless that exact moment is already part of a larger genuine bit about the \
+sword.
 
 controversy_level is a taste/timing call (she filters this herself at review). moderation_risk is a \
 platform-policy flag (slurs etc. can get clips struck regardless of context) — keep these separate, don't \
@@ -355,6 +438,10 @@ def parse_classify_response(raw_text):
                 "clip_end_offset_sec": float(item.get("clip_end_offset_sec", 15.0)),
                 "reason": item.get("reason", ""),
                 "sub_beats": item.get("sub_beats", []),
+                "is_nonono_or_death_beat": item.get("is_nonono_or_death_beat", False),
+                "is_zweihander_beat": item.get("is_zweihander_beat", False),
+                "is_boss_rage_cussing_beat": item.get("is_boss_rage_cussing_beat", False),
+                "is_boss_victory_beat": item.get("is_boss_victory_beat", False),
             })
         except (KeyError, ValueError, TypeError):
             continue
@@ -442,6 +529,10 @@ def moments_to_candidates(moments):
             "confidence": m.get("confidence", "high"),
             "uncertainty_reason": m.get("uncertainty_reason", ""),
             "sub_beats": m["sub_beats"],
+            "is_nonono_or_death_beat": m.get("is_nonono_or_death_beat", False),
+            "is_zweihander_beat": m.get("is_zweihander_beat", False),
+            "is_boss_rage_cussing_beat": m.get("is_boss_rage_cussing_beat", False),
+            "is_boss_victory_beat": m.get("is_boss_victory_beat", False),
         }
         for m in moments
     ]
