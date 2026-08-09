@@ -1,0 +1,6 @@
+.env
+engine/.venv/
+engine/cache/
+engine/candidates*.json
+engine/run.log
+node_modules/

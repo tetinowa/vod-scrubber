@@ -1,0 +1,182 @@
+<title>analyze.py progress</title>
+<style>
+  :root {
+    --bg: #1e1e1e;
+    --panel: #252526;
+    --border: #3a3a3a;
+    --text: #cccccc;
+    --dim: #808080;
+    --accent: #4fc3f7;
+    --done: #6a9955;
+    --error: #f14c4c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, Segoe UI, sans-serif;
+    margin: 0;
+    padding: 24px;
+  }
+  h1 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--dim);
+    margin: 0 0 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 14px;
+  }
+  .step .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+  .step.done .dot { background: var(--done); }
+  .step.active .dot {
+    background: var(--accent);
+    animation: pulse 1.2s ease-in-out infinite;
+  }
+  .step.error .dot { background: var(--error); }
+  .step.done { color: var(--done); }
+  .step.active { color: var(--accent); }
+  .step.error { color: var(--error); }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+  #summary {
+    font-size: 13px;
+    color: var(--dim);
+    margin-bottom: 8px;
+  }
+  #position {
+    font-family: Consolas, monospace;
+    font-size: 13px;
+    color: var(--accent);
+    margin-bottom: 16px;
+    min-height: 18px;
+  }
+  #position .time { color: var(--text); font-weight: 600; }
+  #log {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 14px;
+    font-family: Consolas, monospace;
+    font-size: 12px;
+    white-space: pre-wrap;
+    max-height: 300px;
+    overflow-y: auto;
+    color: var(--dim);
+  }
+</style>
+
+<h1>analyze.py</h1>
+<div class="steps" id="steps"></div>
+<div id="summary"></div>
+<div id="position"></div>
+<div id="log"></div>
+
+<script>
+  const STEPS = [
+    { key: "extract", match: /Extracting audio/, label: "Extracting audio" },
+    { key: "energy", match: /Scoring audio energy/, label: "Scoring audio energy" },
+    { key: "transcribe", match: /Transcribing with faster-whisper/, label: "Transcribing (faster-whisper)" },
+    { key: "hype", match: /Scoring hype keywords/, label: "Scoring hype keywords" },
+    { key: "rate", match: /Scoring speaking rate/, label: "Scoring speaking rate" },
+    { key: "repetition", match: /Scoring repetition bursts/, label: "Scoring repetition bursts" },
+    { key: "done", match: /^Done\./m, label: "Done" },
+  ];
+
+  const SEGMENT_RE = /^\[(\d\d:\d\d:\d\d)\] (.*)$/;
+
+  const stepsEl = document.getElementById("steps");
+  const summaryEl = document.getElementById("summary");
+  const positionEl = document.getElementById("position");
+  const logEl = document.getElementById("log");
+
+  stepsEl.innerHTML = STEPS.map(
+    (s) => `<div class="step" id="step-${s.key}"><div class="dot"></div><div>${s.label}</div></div>`
+  ).join("");
+
+  async function poll() {
+    let text = "";
+    try {
+      const res = await fetch("/log");
+      text = await res.text();
+    } catch (e) {
+      summaryEl.textContent = "Waiting for log...";
+      return;
+    }
+
+    const hasError = /Traceback \(most recent call last\)/.test(text);
+    let lastMatched = -1;
+    STEPS.forEach((s, i) => {
+      if (s.match.test(text)) lastMatched = i;
+    });
+
+    STEPS.forEach((s, i) => {
+      const el = document.getElementById("step-" + s.key);
+      el.className = "step";
+      if (hasError && i === lastMatched) {
+        el.classList.add("error");
+      } else if (i < lastMatched || (i === lastMatched && s.key === "done")) {
+        el.classList.add("done");
+      } else if (i === lastMatched) {
+        el.classList.add("active");
+      }
+    });
+
+    const lines = text.trim().split("\n");
+    let lastSegment = null;
+    for (let i = lines.length - 1; i >= 0; i--) {
+      const m = lines[i].match(SEGMENT_RE);
+      if (m) {
+        lastSegment = m;
+        break;
+      }
+    }
+    positionEl.innerHTML = lastSegment
+      ? `<span class="time">${lastSegment[1]}</span> — ${lastSegment[2]}`
+      : "";
+
+    if (hasError) {
+      const tail = lines.slice(-15).join("\n");
+      summaryEl.textContent = "Failed — see traceback below";
+      summaryEl.style.color = "var(--error)";
+      logEl.textContent = tail;
+    } else {
+      const doneMatch = text.match(/Done\. (\d+) candidates written to (.+)/);
+      if (doneMatch) {
+        summaryEl.textContent = `Finished — ${doneMatch[1]} candidates written to ${doneMatch[2]}`;
+        summaryEl.style.color = "var(--done)";
+      } else {
+        summaryEl.textContent = "Running...";
+        summaryEl.style.color = "var(--dim)";
+      }
+      const tail = lines.slice(-15).join("\n");
+      logEl.textContent = tail;
+    }
+  }
+
+  poll();
+  setInterval(poll, 1000);
+</script>
