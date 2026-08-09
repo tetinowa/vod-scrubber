@@ -226,7 +226,7 @@ Empty array if nothing qualifies.
 Transcript:
 {transcript}"""
 
-CLASSIFY_PROMPT = """You're the expensive, careful review step in a two-tier clip-detection pipeline for \
+CLASSIFY_PREFIX = """You're the expensive, careful review step in a two-tier clip-detection pipeline for \
 a Dark Souls Twitch VOD. A cheap first-pass model already flagged the segment below as possibly containing \
 something clip-worthy — your job is to actually judge it with real context.
 
@@ -237,9 +237,9 @@ Examples of how to classify (few-shot calibration):
 {few_shot}
 
 Now classify this segment. You're given context before and after the flagged window — use it, don't \
-just look at the middle. Timestamps in brackets are absolute video-time in hh:mm:ss.
+just look at the middle. Timestamps in brackets are absolute video-time in hh:mm:ss."""
 
---- CONTEXT BEFORE ---
+CLASSIFY_BODY = """--- CONTEXT BEFORE ---
 {context_before}
 --- FLAGGED SEGMENT ---
 {segment}
@@ -396,10 +396,12 @@ def build_few_shot_text():
     return "\n\n".join(blocks)
 
 
+def classify_prefix_text():
+    return CLASSIFY_PREFIX.format(persona=PERSONA_BRIEF, few_shot=build_few_shot_text())
+
+
 def classify_segment(client, words, context_before_words, segment_words, context_after_words):
-    prompt = CLASSIFY_PROMPT.format(
-        persona=PERSONA_BRIEF,
-        few_shot=build_few_shot_text(),
+    body = CLASSIFY_BODY.format(
         categories=CATEGORIES,
         context_before=words_to_transcript_text(context_before_words) or "(none, start of VOD)",
         segment=words_to_transcript_text(segment_words),
@@ -408,7 +410,10 @@ def classify_segment(client, words, context_before_words, segment_words, context
     response = client.messages.create(
         model=CLASSIFY_MODEL,
         max_tokens=CLASSIFY_MAX_TOKENS,
-        messages=[{"role": "user", "content": prompt}],
+        messages=[{"role": "user", "content": [
+            {"type": "text", "text": classify_prefix_text(), "cache_control": {"type": "ephemeral"}},
+            {"type": "text", "text": body},
+        ]}],
     )
     return get_text_block(response)
 

@@ -1,0 +1,5 @@
+{
+  "game": "DS1",
+  "notes": "Same purpose as the DS2 log \u2014 actual play order, not ds1_bosses.json's typical_order_hint. DS1 run is already complete (including DLC, Gwyn defeated), but the specific sequence she visited areas in wasn't tracked at the time. Empty for now \u2014 backfill from old VODs if/when useful (e.g. if a DS1 long-form video is ever made), otherwise leave blank since the run is already finished and going forward only matters for DS2.",
+  "playthrough_order": []
+}

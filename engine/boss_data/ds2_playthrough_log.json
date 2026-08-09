@@ -1,0 +1,12 @@
+{
+  "game": "DS2",
+  "notes": "This is the source of truth for sequencing in arc_review.py \u2014 NOT ds2_bosses.json's typical_order_hint, which is just wiki-standard reference order. sequence reflects what actually happened in Laura's run, in order, including any out-of-order detours. Append new entries as VODs happen; don't reorder past ones even if a later visit reveals she 'should' have gone somewhere earlier \u2014 the log is a history, not a corrected route.",
+  "playthrough_order": [
+    { "sequence": 1, "area_id": "things_betwixt", "vod_ref": null, "notes": "" },
+    { "sequence": 2, "area_id": "forest_of_fallen_giants", "vod_ref": null, "notes": "" },
+    { "sequence": 3, "area_id": "cardinal_tower", "vod_ref": null, "notes": "" },
+    { "sequence": 4, "area_id": "no_mans_wharf", "vod_ref": null, "notes": "" },
+    { "sequence": 5, "area_id": "heides_tower_of_flame", "vod_ref": null, "notes": "Old Dragonslayer defeated here" },
+    { "sequence": 6, "area_id": "lost_bastille", "vod_ref": null, "notes": "Ruin Sentinels not yet fought" }
+  ]
+}

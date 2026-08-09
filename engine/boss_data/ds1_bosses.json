@@ -1,0 +1,439 @@
+{
+  "game": "DS1",
+  "source": "https://darksouls.wiki.fextralife.com/Area_Bosses + community connectivity map (u/seajaycj)",
+  "areas": [
+    {
+      "area_id": "undead_asylum",
+      "area_name": "Undead Asylum",
+      "typical_order_hint": 1,
+      "branch_from": null,
+      "bosses": [
+        {
+          "boss_id": "asylum_demon",
+          "boss_name": "Asylum Demon",
+          "aliases": [],
+          "note": "fought on first visit; area revisited later for Stray Demon fight"
+        },
+        {
+          "boss_id": "stray_demon",
+          "boss_name": "Stray Demon",
+          "aliases": [],
+          "note": "optional, only fightable on the revisit to the Asylum (after leaving for the first time) \u2014 fall through the floor of the main hall where Asylum Demon was fought"
+        }
+      ]
+    },
+    {
+      "area_id": "firelink_shrine",
+      "area_name": "Firelink Shrine",
+      "typical_order_hint": 2,
+      "branch_from": "undead_asylum",
+      "bosses": []
+    },
+    {
+      "area_id": "upper_burg",
+      "area_name": "Upper Undead Burg",
+      "typical_order_hint": 3,
+      "branch_from": "firelink_shrine",
+      "bosses": [
+        {
+          "boss_id": "taurus_demon",
+          "boss_name": "Taurus Demon",
+          "aliases": [],
+          "note": "gates Upper Burg from Undead Parish, Hellkite Bridge"
+        }
+      ]
+    },
+    {
+      "area_id": "lower_burg",
+      "area_name": "Lower Undead Burg",
+      "typical_order_hint": 4,
+      "branch_from": "upper_burg",
+      "bosses": [
+        {
+          "boss_id": "capra_demon",
+          "boss_name": "Capra Demon",
+          "aliases": [],
+          "note": "confirmed by Laura's own playthrough \u2014 fought at the end of Lower Undead Burg, gates into The Depths"
+        }
+      ]
+    },
+    {
+      "area_id": "undead_parish",
+      "area_name": "Undead Parish",
+      "typical_order_hint": 4,
+      "branch_from": "upper_burg",
+      "bosses": [
+        {
+          "boss_id": "bell_gargoyles",
+          "boss_name": "Bell Gargoyles",
+          "aliases": [],
+          "note": "fought within Undead Parish"
+        }
+      ]
+    },
+    {
+      "area_id": "the_depths",
+      "area_name": "The Depths",
+      "typical_order_hint": 5,
+      "branch_from": "lower_burg",
+      "bosses": []
+    },
+    {
+      "area_id": "darkroot_garden",
+      "area_name": "Darkroot Garden",
+      "typical_order_hint": 4,
+      "branch_from": "undead_parish",
+      "bosses": [
+        {
+          "boss_id": "moonlight_butterfly",
+          "boss_name": "Moonlight Butterfly",
+          "aliases": [],
+          "note": "boss of the first area of Darkroot Garden, top of a moss-covered staircase"
+        },
+        {
+          "boss_id": "great_grey_wolf_sif",
+          "boss_name": "Great Grey Wolf Sif",
+          "aliases": [],
+          "note": "found across the river from Darkroot Garden proper, guarding Artorias's grave; also reachable via ladder near the Hydra in Darkroot Basin"
+        }
+      ]
+    },
+    {
+      "area_id": "darkroot_basin",
+      "area_name": "Darkroot Basin",
+      "typical_order_hint": 5,
+      "branch_from": "darkroot_garden",
+      "bosses": []
+    },
+    {
+      "area_id": "valley_of_drakes",
+      "area_name": "Valley of Drakes",
+      "typical_order_hint": 5,
+      "branch_from": "darkroot_basin",
+      "bosses": []
+    },
+    {
+      "area_id": "blighttown_lower",
+      "area_name": "Lower Blighttown",
+      "typical_order_hint": 6,
+      "branch_from": "the_depths",
+      "bosses": [
+        {
+          "boss_id": "gaping_dragon",
+          "boss_name": "Gaping Dragon",
+          "aliases": [],
+          "note": "gates The Depths -> Upper Blighttown"
+        }
+      ]
+    },
+    {
+      "area_id": "blighttown_upper",
+      "area_name": "Upper Blighttown",
+      "typical_order_hint": 6,
+      "branch_from": "the_depths",
+      "bosses": []
+    },
+    {
+      "area_id": "quelaags_domain",
+      "area_name": "Quelaag's Domain",
+      "typical_order_hint": 7,
+      "branch_from": "blighttown_lower",
+      "bosses": [
+        {
+          "boss_id": "chaos_witch_quelaag",
+          "boss_name": "Chaos Witch Quelaag",
+          "aliases": [],
+          "note": "gates Lower Blighttown -> Quelaag's Domain"
+        }
+      ]
+    },
+    {
+      "area_id": "great_hollow",
+      "area_name": "Great Hollow",
+      "typical_order_hint": 7,
+      "branch_from": "blighttown_lower",
+      "bosses": []
+    },
+    {
+      "area_id": "ash_lake",
+      "area_name": "Ash Lake",
+      "typical_order_hint": 8,
+      "branch_from": "great_hollow",
+      "bosses": []
+    },
+    {
+      "area_id": "upper_demon_ruins",
+      "area_name": "Upper Demon Ruins",
+      "typical_order_hint": 8,
+      "branch_from": "quelaags_domain",
+      "bosses": [
+        {
+          "boss_id": "ceaseless_discharge",
+          "boss_name": "Ceaseless Discharge",
+          "aliases": [],
+          "note": "gates Upper Demon Ruins -> Mid Demon Ruins"
+        }
+      ]
+    },
+    {
+      "area_id": "mid_demon_ruins",
+      "area_name": "Mid Demon Ruins",
+      "typical_order_hint": 9,
+      "branch_from": "upper_demon_ruins",
+      "bosses": []
+    },
+    {
+      "area_id": "lower_demon_ruins",
+      "area_name": "Lower Demon Ruins",
+      "typical_order_hint": 10,
+      "branch_from": "mid_demon_ruins",
+      "bosses": [
+        {
+          "boss_id": "demon_firesage",
+          "boss_name": "Demon Firesage",
+          "aliases": [],
+          "note": "gates Mid Demon Ruins -> Lower Demon Ruins"
+        }
+      ]
+    },
+    {
+      "area_id": "lost_izalith",
+      "area_name": "Lost Izalith",
+      "typical_order_hint": 11,
+      "branch_from": "lower_demon_ruins",
+      "bosses": [
+        {
+          "boss_id": "centipede_demon",
+          "boss_name": "Centipede Demon",
+          "aliases": [],
+          "note": "gates Lower Demon Ruins -> Lost Izalith"
+        },
+        {
+          "boss_id": "bed_of_chaos",
+          "boss_name": "Bed of Chaos",
+          "aliases": [],
+          "note": "final boss of Lost Izalith, not shown as a gate edge on the map since it's a dead end"
+        }
+      ]
+    },
+    {
+      "area_id": "sens_fortress",
+      "area_name": "Sen's Fortress",
+      "typical_order_hint": 5,
+      "branch_from": "undead_parish",
+      "bosses": []
+    },
+    {
+      "area_id": "anor_londo",
+      "area_name": "Anor Londo",
+      "typical_order_hint": 6,
+      "branch_from": "sens_fortress",
+      "bosses": [
+        {
+          "boss_id": "iron_golem",
+          "boss_name": "Iron Golem",
+          "aliases": [],
+          "note": "gates Sen's Fortress -> Anor Londo"
+        },
+        {
+          "boss_id": "ornstein_and_smough",
+          "boss_name": "Ornstein and Smough",
+          "aliases": [],
+          "note": "gates Anor Londo -> Duke's Archives (\"Gold fog\")"
+        },
+        {
+          "boss_id": "dark_sun_gwyndolin",
+          "boss_name": "Dark Sun Gwyndolin",
+          "aliases": [],
+          "note": "optional, at the Darkmoon Tomb bonfire \u2014 bottom of the rotating spiral staircase, behind Gwyn's statue; requires Darkmoon Seance Ring or killing Gwynevere to access"
+        }
+      ]
+    },
+    {
+      "area_id": "dukes_archives",
+      "area_name": "Duke's Archives",
+      "typical_order_hint": 7,
+      "branch_from": "anor_londo",
+      "bosses": []
+    },
+    {
+      "area_id": "crystal_caves",
+      "area_name": "Crystal Caves",
+      "typical_order_hint": 8,
+      "branch_from": "dukes_archives",
+      "bosses": [
+        {
+          "boss_id": "seath_the_scaleless",
+          "boss_name": "Seath the Scaleless",
+          "aliases": [],
+          "note": "fought within Crystal Caves"
+        }
+      ]
+    },
+    {
+      "area_id": "painted_world",
+      "area_name": "Painted World of Ariamis",
+      "typical_order_hint": 7,
+      "branch_from": "anor_londo",
+      "bosses": [
+        {
+          "boss_id": "priscilla",
+          "boss_name": "Crossbreed Priscilla",
+          "aliases": [],
+          "note": "fought in Painting Hall w/ Doll"
+        }
+      ]
+    },
+    {
+      "area_id": "upper_londo",
+      "area_name": "Upper New Londo Ruins",
+      "typical_order_hint": 6,
+      "branch_from": "firelink_shrine",
+      "bosses": []
+    },
+    {
+      "area_id": "the_abyss",
+      "area_name": "The Abyss",
+      "typical_order_hint": 8,
+      "branch_from": "upper_londo",
+      "bosses": []
+    },
+    {
+      "area_id": "lower_londo",
+      "area_name": "Lower New Londo Ruins",
+      "typical_order_hint": 7,
+      "branch_from": "upper_londo",
+      "bosses": [
+        {
+          "boss_id": "four_kings",
+          "boss_name": "Four Kings",
+          "aliases": [],
+          "note": "gates The Abyss <-> Lower Londo (water drained)"
+        }
+      ]
+    },
+    {
+      "area_id": "catacombs",
+      "area_name": "Catacombs",
+      "typical_order_hint": 6,
+      "branch_from": "firelink_shrine",
+      "bosses": []
+    },
+    {
+      "area_id": "tomb_of_giants",
+      "area_name": "Tomb of the Giants",
+      "typical_order_hint": 7,
+      "branch_from": "catacombs",
+      "bosses": [
+        {
+          "boss_id": "pinwheel",
+          "boss_name": "Pinwheel",
+          "aliases": [],
+          "note": "gates Catacombs -> Tomb of the Giants"
+        },
+        {
+          "boss_id": "nito",
+          "boss_name": "Gravelord Nito",
+          "aliases": [],
+          "note": "fought within Tomb of the Giants, dead end"
+        }
+      ]
+    },
+    {
+      "area_id": "firelink_altar",
+      "area_name": "Firelink Altar",
+      "typical_order_hint": 9,
+      "branch_from": "firelink_shrine",
+      "bosses": [
+        {
+          "boss_id": "gwyn_frampt_path",
+          "boss_name": "(4 Lord Souls gate, no boss)",
+          "aliases": [],
+          "note": "not a boss \u2014 gate requires 4 Lord Souls or Kiln Skip"
+        }
+      ]
+    },
+    {
+      "area_id": "the_kiln",
+      "area_name": "Kiln of the First Flame",
+      "typical_order_hint": 10,
+      "branch_from": "firelink_altar",
+      "bosses": [
+        {
+          "boss_id": "gwyn",
+          "boss_name": "Gwyn, Lord of Cinder",
+          "aliases": []
+        }
+      ]
+    },
+    {
+      "area_id": "oolacile_sanctuary_garden",
+      "area_name": "Oolacile Sanctuary Garden (DLC)",
+      "typical_order_hint": 100,
+      "branch_from": "darkroot_basin",
+      "bosses": []
+    },
+    {
+      "area_id": "oolacile_sanctuary",
+      "area_name": "Oolacile Sanctuary (DLC)",
+      "typical_order_hint": 101,
+      "branch_from": "oolacile_sanctuary_garden",
+      "bosses": [
+        {
+          "boss_id": "sanctuary_guardian",
+          "boss_name": "Sanctuary Guardian",
+          "aliases": [],
+          "note": "gates Sanctuary Garden -> Sanctuary proper"
+        }
+      ]
+    },
+    {
+      "area_id": "royal_wood",
+      "area_name": "Royal Wood (DLC)",
+      "typical_order_hint": 102,
+      "branch_from": "oolacile_sanctuary",
+      "bosses": []
+    },
+    {
+      "area_id": "oolacile_township",
+      "area_name": "Oolacile Township (DLC)",
+      "typical_order_hint": 103,
+      "branch_from": "royal_wood",
+      "bosses": [
+        {
+          "boss_id": "artorias",
+          "boss_name": "Artorias the Abysswalker",
+          "aliases": [],
+          "note": "gates Royal Wood -> Oolacile Township"
+        }
+      ]
+    },
+    {
+      "area_id": "battle_of_stoicism",
+      "area_name": "Battle of Stoicism Altar (DLC)",
+      "typical_order_hint": 104,
+      "branch_from": "oolacile_township",
+      "bosses": [
+        {
+          "boss_id": "kalameet",
+          "boss_name": "Black Dragon Kalameet",
+          "aliases": []
+        }
+      ]
+    },
+    {
+      "area_id": "chasm_of_the_abyss",
+      "area_name": "Chasm of the Abyss (DLC)",
+      "typical_order_hint": 104,
+      "branch_from": "oolacile_township",
+      "bosses": [
+        {
+          "boss_id": "manus",
+          "boss_name": "Manus, Father of the Abyss",
+          "aliases": []
+        }
+      ]
+    }
+  ],
+  "notes": "Rebuilt against the community connectivity map (u/seajaycj) the user provided, which shows boss placement as area-transition gates rather than a flat area->boss list. This is more precise than the original wiki-derived version. Bosses are attributed to whichever area the map's edge label implies they gate. Kalameet is placed at Battle of Stoicism per the map's dead-end branch off Oolacile Township, separate from the Manus/Chasm of the Abyss branch. Frampt/Kaathe NPC choices and non-boss gates (e.g. the 4 Lord Souls requirement at Firelink Altar) are noted but not treated as bosses. aliases intentionally left empty for Laura to fill in."
+}

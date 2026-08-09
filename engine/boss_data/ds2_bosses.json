@@ -1,0 +1,605 @@
+{
+  "game": "DS2",
+  "source": "https://darksouls2.wiki.fextralife.com/Bosses",
+  "areas": [
+    {
+      "area_id": "things_betwixt",
+      "area_name": "Things Betwixt",
+      "branch_from": null,
+      "bosses": [],
+      "typical_order_hint": 1
+    },
+    {
+      "area_id": "forest_of_fallen_giants",
+      "area_name": "Forest of Fallen Giants",
+      "branch_from": "things_betwixt",
+      "bosses": [
+        {
+          "boss_id": "last_giant",
+          "boss_name": "The Last Giant",
+          "aliases": []
+        },
+        {
+          "boss_id": "pursuer",
+          "boss_name": "The Pursuer",
+          "aliases": []
+        }
+      ],
+      "typical_order_hint": 2
+    },
+    {
+      "area_id": "cardinal_tower",
+      "area_name": "Cardinal Tower",
+      "branch_from": "forest_of_fallen_giants",
+      "bosses": [],
+      "typical_order_hint": 3
+    },
+    {
+      "area_id": "heides_tower_of_flame",
+      "area_name": "Heide's Tower of Flame",
+      "branch_from": "cardinal_tower",
+      "bosses": [
+        {
+          "boss_id": "old_dragonslayer",
+          "boss_name": "Old Dragonslayer",
+          "aliases": []
+        },
+        {
+          "boss_id": "dragonrider",
+          "boss_name": "Dragonrider",
+          "aliases": []
+        }
+      ],
+      "typical_order_hint": 4
+    },
+    {
+      "area_id": "no_mans_wharf",
+      "area_name": "No-Man's Wharf",
+      "branch_from": "heides_tower_of_flame",
+      "bosses": [
+        {
+          "boss_id": "flexile_sentry",
+          "boss_name": "Flexile Sentry",
+          "aliases": []
+        }
+      ],
+      "typical_order_hint": 5
+    },
+    {
+      "area_id": "lost_bastille",
+      "area_name": "Lost Bastille",
+      "branch_from": "no_mans_wharf",
+      "bosses": [
+        {
+          "boss_id": "ruin_sentinels",
+          "boss_name": "Ruin Sentinels",
+          "aliases": []
+        },
+        {
+          "boss_id": "belfry_gargoyles",
+          "boss_name": "Belfry Gargoyles",
+          "aliases": []
+        }
+      ],
+      "typical_order_hint": 6
+    },
+    {
+      "area_id": "sinners_rise",
+      "area_name": "Sinner's Rise",
+      "branch_from": "lost_bastille",
+      "bosses": [
+        {
+          "boss_id": "lost_sinner",
+          "boss_name": "Lost Sinner",
+          "aliases": []
+        }
+      ],
+      "typical_order_hint": 7
+    },
+    {
+      "area_id": "shaded_woods",
+      "area_name": "Shaded Woods",
+      "branch_from": "fork_road",
+      "bosses": [],
+      "typical_order_hint": 3
+    },
+    {
+      "area_id": "shaded_ruins",
+      "area_name": "Shaded Ruins",
+      "branch_from": "shaded_woods",
+      "bosses": [
+        {
+          "boss_id": "scorpioness_najka",
+          "boss_name": "Scorpioness Najka",
+          "aliases": [],
+          "note": "found in Shaded Ruins area of Shaded Woods, guards the path toward Doors of Pharros"
+        }
+      ],
+      "typical_order_hint": 4
+    },
+    {
+      "area_id": "doors_of_pharros",
+      "area_name": "Doors of Pharros",
+      "branch_from": "shaded_ruins",
+      "bosses": [
+        {
+          "boss_id": "royal_rat_authority",
+          "boss_name": "Royal Rat Authority",
+          "aliases": [],
+          "note": "fought at Ordeal's End bonfire, reached through Doors of Pharros"
+        }
+      ],
+      "typical_order_hint": 5
+    },
+    {
+      "area_id": "huntsmans_copse",
+      "area_name": "Huntsman's Copse",
+      "branch_from": "forest_of_fallen_giants",
+      "bosses": [
+        {
+          "boss_id": "skeleton_lords",
+          "boss_name": "The Skeleton Lords",
+          "aliases": []
+        }
+      ],
+      "typical_order_hint": 4
+    },
+    {
+      "area_id": "undead_purgatory",
+      "area_name": "Undead Purgatory",
+      "branch_from": "huntsmans_copse",
+      "bosses": [
+        {
+          "boss_id": "executioners_chariot",
+          "boss_name": "Executioner's Chariot",
+          "aliases": []
+        }
+      ],
+      "typical_order_hint": 5
+    },
+    {
+      "area_id": "harvest_valley",
+      "area_name": "Harvest Valley",
+      "branch_from": "forest_of_fallen_giants",
+      "bosses": [],
+      "typical_order_hint": 4
+    },
+    {
+      "area_id": "earthen_peak",
+      "area_name": "Earthen Peak",
+      "branch_from": "harvest_valley",
+      "bosses": [
+        {
+          "boss_id": "covetous_demon",
+          "boss_name": "Covetous Demon",
+          "aliases": [],
+          "note": "fought first, at the Harvest Valley/Earthen Peak transition"
+        },
+        {
+          "boss_id": "mytha",
+          "boss_name": "Mytha, the Baneful Queen",
+          "aliases": [],
+          "note": "fought after Covetous Demon, deeper in Earthen Peak proper"
+        }
+      ],
+      "typical_order_hint": 5
+    },
+    {
+      "area_id": "iron_keep",
+      "area_name": "Iron Keep",
+      "branch_from": "earthen_peak",
+      "bosses": [
+        {
+          "boss_id": "smelter_demon",
+          "boss_name": "Smelter Demon",
+          "aliases": []
+        }
+      ],
+      "typical_order_hint": 6
+    },
+    {
+      "area_id": "the_gutter",
+      "area_name": "The Gutter / Black Gulch",
+      "branch_from": "grave_of_saints",
+      "bosses": [],
+      "typical_order_hint": 4
+    },
+    {
+      "area_id": "drangleic_castle",
+      "area_name": "Drangleic Castle",
+      "branch_from": "shrine_of_winter",
+      "bosses": [
+        {
+          "boss_id": "throne_watcher_defender",
+          "boss_name": "Throne Watcher and Throne Defender",
+          "aliases": []
+        },
+        {
+          "boss_id": "vendrick",
+          "boss_name": "Vendrick",
+          "aliases": []
+        },
+        {
+          "boss_id": "looking_glass_knight",
+          "boss_name": "Looking Glass Knight",
+          "aliases": [],
+          "note": "reached via King's Passage, off Drangleic Castle"
+        }
+      ],
+      "typical_order_hint": 7
+    },
+    {
+      "area_id": "black_gulch",
+      "area_name": "Black Gulch",
+      "branch_from": "the_gutter",
+      "bosses": [],
+      "typical_order_hint": 5
+    },
+    {
+      "area_id": "doors_of_pharros_2",
+      "area_name": "Doors of Pharros (Grave of Saints branch)",
+      "branch_from": "black_gulch",
+      "bosses": [],
+      "typical_order_hint": 6
+    },
+    {
+      "area_id": "aldias_keep",
+      "area_name": "Aldia's Keep",
+      "branch_from": "mist_area",
+      "bosses": [],
+      "typical_order_hint": 8
+    },
+    {
+      "area_id": "shrine_of_amana",
+      "area_name": "Shrine of Amana",
+      "branch_from": "undead_crypt",
+      "bosses": [
+        {
+          "boss_id": "demon_of_song",
+          "boss_name": "Demon of Song",
+          "aliases": [],
+          "note": "fought here per official progress route, not Dragon Aerie"
+        }
+      ],
+      "typical_order_hint": 6
+    },
+    {
+      "area_id": "dragon_aerie",
+      "area_name": "Dragon Aerie",
+      "branch_from": "aldias_keep",
+      "bosses": [
+        {
+          "boss_id": "guardian_dragon",
+          "boss_name": "Guardian Dragon",
+          "aliases": []
+        },
+        {
+          "boss_id": "twin_dragonriders",
+          "boss_name": "Twin Dragonrider",
+          "aliases": []
+        }
+      ],
+      "typical_order_hint": 7
+    },
+    {
+      "area_id": "dragon_shrine",
+      "area_name": "Dragon Shrine",
+      "branch_from": "dragon_aerie",
+      "bosses": [
+        {
+          "boss_id": "ancient_dragon",
+          "boss_name": "Ancient Dragon",
+          "aliases": []
+        }
+      ],
+      "typical_order_hint": 8
+    },
+    {
+      "area_id": "brightstone_cove_tseldora",
+      "area_name": "Brightstone Cove Tseldora",
+      "branch_from": "mist_area",
+      "bosses": [
+        {
+          "boss_id": "prowling_magus",
+          "boss_name": "Prowling Magus and Congregation",
+          "aliases": []
+        }
+      ],
+      "typical_order_hint": 6
+    },
+    {
+      "area_id": "the_duke_dear_freja",
+      "area_name": "Brightstone Cove Tseldora (deep)",
+      "branch_from": "brightstone_cove_tseldora",
+      "bosses": [
+        {
+          "boss_id": "dukes_dear_freja",
+          "boss_name": "The Duke's Dear Freja",
+          "aliases": []
+        }
+      ],
+      "typical_order_hint": 7
+    },
+    {
+      "area_id": "iron_passage",
+      "area_name": "Iron Passage",
+      "branch_from": "iron_keep",
+      "bosses": [
+        {
+          "boss_id": "smelter_demon_blue",
+          "boss_name": "Smelter Demon (Blue, DLC)",
+          "aliases": [],
+          "note": "Crown of the Old Iron King DLC variant, fought in Iron Passage"
+        }
+      ],
+      "typical_order_hint": 8
+    },
+    {
+      "area_id": "the_rotten_area",
+      "area_name": "Black Gulch (The Rotten)",
+      "branch_from": "black_gulch",
+      "bosses": [
+        {
+          "boss_id": "the_rotten",
+          "boss_name": "The Rotten",
+          "aliases": []
+        }
+      ],
+      "typical_order_hint": 6
+    },
+    {
+      "area_id": "undead_crypt",
+      "area_name": "Undead Crypt",
+      "branch_from": "drangleic_castle",
+      "bosses": [
+        {
+          "boss_id": "velstadt",
+          "boss_name": "Velstadt, the Royal Aegis",
+          "aliases": []
+        }
+      ],
+      "typical_order_hint": 9
+    },
+    {
+      "area_id": "throne_of_want",
+      "area_name": "Throne of Want",
+      "branch_from": "drangleic_castle",
+      "bosses": [
+        {
+          "boss_id": "giant_lord",
+          "boss_name": "Giant Lord",
+          "aliases": []
+        },
+        {
+          "boss_id": "nashandra",
+          "boss_name": "Nashandra",
+          "aliases": []
+        }
+      ],
+      "typical_order_hint": 10
+    },
+    {
+      "area_id": "cave_of_the_dead",
+      "area_name": "Cave of the Dead / Grave of Saints (Darklurker)",
+      "branch_from": "grave_of_saints",
+      "bosses": [
+        {
+          "boss_id": "darklurker",
+          "boss_name": "Darklurker",
+          "aliases": []
+        }
+      ],
+      "typical_order_hint": 100
+    },
+    {
+      "area_id": "old_iron_king_area",
+      "area_name": "Iron Keep (Old Iron King)",
+      "branch_from": "iron_keep",
+      "bosses": [
+        {
+          "boss_id": "old_iron_king",
+          "boss_name": "Old Iron King",
+          "aliases": []
+        }
+      ],
+      "typical_order_hint": 6
+    },
+    {
+      "area_id": "dragon_aerie_2",
+      "area_name": "Dragon Aerie (Demon of Song / Scorpioness)",
+      "branch_from": "dragon_aerie",
+      "bosses": [],
+      "typical_order_hint": 7
+    },
+    {
+      "area_id": "aldia_scholar",
+      "area_name": "Aldia's Keep (deep)",
+      "branch_from": "aldias_keep",
+      "bosses": [
+        {
+          "boss_id": "aldia",
+          "boss_name": "Aldia, Scholar of the First Sin",
+          "aliases": []
+        }
+      ],
+      "typical_order_hint": 9
+    },
+    {
+      "area_id": "mist_area",
+      "area_name": "Mist Area",
+      "typical_order_hint": 5,
+      "branch_from": "fork_road",
+      "bosses": []
+    },
+    {
+      "area_id": "fork_road",
+      "area_name": "Fork Road",
+      "typical_order_hint": 4,
+      "branch_from": "majula",
+      "bosses": []
+    },
+    {
+      "area_id": "grave_of_saints",
+      "area_name": "Grave of Saints",
+      "typical_order_hint": 5,
+      "branch_from": "majula",
+      "bosses": [
+        {
+          "boss_id": "royal_rat_vanguard",
+          "boss_name": "Royal Rat Vanguard",
+          "aliases": [],
+          "note": "fought in this Grave of Saints -> Gutter transition per map's linear chain"
+        }
+      ]
+    },
+    {
+      "area_id": "belfry_luna",
+      "area_name": "Belfry Luna",
+      "typical_order_hint": 7,
+      "branch_from": "lost_bastille",
+      "bosses": []
+    },
+    {
+      "area_id": "belfry_sol",
+      "area_name": "Belfry Sol",
+      "typical_order_hint": 7,
+      "branch_from": "iron_keep",
+      "bosses": []
+    },
+    {
+      "area_id": "blue_cathedral",
+      "area_name": "The Blue Cathedral",
+      "typical_order_hint": 5,
+      "branch_from": "heides_tower_of_flame",
+      "bosses": []
+    },
+    {
+      "area_id": "brume_tower",
+      "area_name": "Brume Tower (Crown of the Old Iron King DLC)",
+      "typical_order_hint": 201,
+      "branch_from": "iron_keep",
+      "bosses": [
+        {
+          "boss_id": "fume_knight",
+          "boss_name": "Fume Knight",
+          "aliases": [],
+          "note": "located at the very bottom of the central tower in Brume Tower"
+        }
+      ]
+    },
+    {
+      "area_id": "memory_of_old_iron_king",
+      "area_name": "Memory of the Old Iron King (Crown of the Old Iron King DLC)",
+      "typical_order_hint": 202,
+      "branch_from": "brume_tower",
+      "bosses": [
+        {
+          "boss_id": "sir_alonne",
+          "boss_name": "Sir Alonne",
+          "aliases": [],
+          "note": "requires Crown of the Old Iron King (dropped by Fume Knight) + Ashen Mist Heart to access the memory"
+        }
+      ]
+    },
+    {
+      "area_id": "shulva_sanctum_city",
+      "area_name": "Shulva, Sanctum City (Crown of the Sunken King DLC)",
+      "typical_order_hint": 200,
+      "branch_from": "black_gulch",
+      "bosses": [
+        {
+          "boss_id": "gank_squad",
+          "boss_name": "Graverobber, Varg, and Cerah",
+          "aliases": [],
+          "note": "fought together at Priestess' Chamber"
+        }
+      ]
+    },
+    {
+      "area_id": "dragons_sanctum",
+      "area_name": "Dragon's Sanctum (Crown of the Sunken King DLC)",
+      "typical_order_hint": 201,
+      "branch_from": "shulva_sanctum_city",
+      "bosses": [
+        {
+          "boss_id": "elana",
+          "boss_name": "Elana, Squalid Queen",
+          "aliases": [],
+          "note": "fought at Sanctum Interior, bottom floor of Dragon's Sanctum"
+        }
+      ]
+    },
+    {
+      "area_id": "dragons_rest",
+      "area_name": "Dragon's Rest (Crown of the Sunken King DLC)",
+      "typical_order_hint": 202,
+      "branch_from": "dragons_sanctum",
+      "bosses": [
+        {
+          "boss_id": "sinh",
+          "boss_name": "Sinh, the Slumbering Dragon",
+          "aliases": [],
+          "note": "fought at Sanctum Nadir"
+        }
+      ]
+    },
+    {
+      "area_id": "frozen_eleum_loyce",
+      "area_name": "Frozen Eleum Loyce (Crown of the Ivory King DLC)",
+      "typical_order_hint": 203,
+      "branch_from": "shrine_of_winter",
+      "bosses": [
+        {
+          "boss_id": "aava",
+          "boss_name": "Aava, the King's Pet",
+          "aliases": [],
+          "note": "fought just before the fog door in the initial Frozen Eleum Loyce area"
+        }
+      ]
+    },
+    {
+      "area_id": "frigid_outskirts",
+      "area_name": "Frigid Outskirts (Crown of the Ivory King DLC)",
+      "typical_order_hint": 204,
+      "branch_from": "frozen_eleum_loyce",
+      "bosses": [
+        {
+          "boss_id": "lud_and_zallen",
+          "boss_name": "Lud and Zallen, the King's Pets",
+          "aliases": [],
+          "note": "reached via Expulsion Chamber"
+        }
+      ]
+    },
+    {
+      "area_id": "grand_cathedral",
+      "area_name": "Grand Cathedral (Crown of the Ivory King DLC)",
+      "typical_order_hint": 205,
+      "branch_from": "frozen_eleum_loyce",
+      "bosses": [
+        {
+          "boss_id": "burnt_ivory_king",
+          "boss_name": "Burnt Ivory King",
+          "aliases": []
+        }
+      ]
+    },
+    {
+      "area_id": "majula",
+      "area_name": "Majula",
+      "typical_order_hint": 3,
+      "branch_from": "forest_of_fallen_giants",
+      "bosses": [],
+      "note": "central hub area; most of the map branches out from here"
+    },
+    {
+      "area_id": "shrine_of_winter",
+      "area_name": "Shrine of Winter",
+      "typical_order_hint": 9,
+      "branch_from": "fork_road",
+      "bosses": [],
+      "note": "gate to Drangleic Castle; unlocks after killing the 4 Old Ones OR reaching 1,000,000 soul memory. Also the access point to Frozen Eleum Loyce DLC via the Frozen Flower."
+    }
+  ],
+  "notes": "Area order_hint follows the DS2 world-map reference already established for Laura's playthrough: Things Betwixt -> Forest of Fallen Giants -> Cardinal Tower -> Heide's Tower of Flame -> No Man's Wharf -> Lost Bastille -> Sinner's Rise as main path, with Forest of Fallen Giants -> Shaded Woods -> Shaded Ruins -> Doors of Pharros as a branch. Remaining areas (Huntsman's Copse, Harvest Valley/Earthen Peak/Iron Keep, Brightstone Cove, Drangleic Castle, Undead Crypt, Dragon Aerie/Shrine, DLC zones) are placed by community-standard progress order since Laura's playthrough hasn't reached them yet \u2014 order_hint values will likely need adjusting once she actually gets there, since DS2 branches heavily. aliases intentionally empty for you to fill in."
+}

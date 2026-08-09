@@ -1,6 +1,7 @@
 .env
 engine/.venv/
 engine/cache/
-engine/candidates*.json
+candidates*.json
+storyline*.json
 engine/run.log
 node_modules/

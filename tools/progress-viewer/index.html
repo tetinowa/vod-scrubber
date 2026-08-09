@@ -98,9 +98,10 @@
 <script>
   const STEPS = [
     { key: "extract", match: /Extracting audio/, label: "Extracting audio" },
+    { key: "load", match: /Loading audio/, label: "Loading audio" },
     { key: "energy", match: /Scoring audio energy/, label: "Scoring audio energy" },
+    { key: "pitch", match: /Scoring pitch\/scream signal/, label: "Scoring pitch/scream signal" },
     { key: "transcribe", match: /Transcribing with faster-whisper/, label: "Transcribing (faster-whisper)" },
-    { key: "hype", match: /Scoring hype keywords/, label: "Scoring hype keywords" },
     { key: "rate", match: /Scoring speaking rate/, label: "Scoring speaking rate" },
     { key: "repetition", match: /Scoring repetition bursts/, label: "Scoring repetition bursts" },
     { key: "done", match: /^Done\./m, label: "Done" },
